@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Sentence Transformation Practice - Ms Lê Hằng English</title>
+    <!-- Google Font Quicksand -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #8854C0;
+            --secondary-color: #FDCB6E;
+            --accent-color: #00C9A7;
+            --correct-color: #00D26A;
+            --wrong-color: #FF4757;
+            --card-bg: #FFFFFF;
+            --text-color: #2D3436;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Quicksand', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(-45deg, #45aaf2, #8854C0, #a55eea, #fd9644);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cpath d='M20 20 L30 10 L40 20 M60 60 A 4 4 0 1 1 60 52 A 4 4 0 1 1 60 60' fill='none' stroke='%23ffffff' stroke-opacity='0.12' stroke-width='2'/%3E%3C/svg%3E");
+            z-index: 0;
+            pointer-events: none;
+            animation: floatingPattern 40s linear infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes floatingPattern {
+            0% { background-position: 0 0; }
+            100% { background-position: 400px 400px; }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 820px;
+            z-index: 1;
+        }
+
+        .header-teacher {
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: #FFFFFF;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 8px;
+        }
+
+        .notice-box {
+            background: #FFEDD5;
+            border: 3px solid #F97316;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 6px 0 #EA580C;
+            text-align: center;
+            color: #7C2D12;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .notice-title {
+            font-weight: 900;
+            font-size: 1.15rem;
+            color: #EA580C;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        /* CARD DANH MỤC KHÁI NIỆM */
+        .section-title {
+            background: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 12px;
+            margin: 30px 0 15px 0;
+            box-shadow: 0 4px 0 #6C3FB8;
+            font-weight: 900;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+        }
+
+        .question-card {
+            background: var(--card-bg);
+            border: 4px solid #E2E8F0;
+            border-radius: 20px;
+            padding: 22px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 0 #CBD5E1;
+        }
+
+        .origin-sentence {
+            background: #F8FAFC;
+            border: 2px dashed #94A3B8;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+            line-height: 1.4;
+        }
+
+        /* Ô NHẬP LIỆU CẤU TRÚC 3D */
+        .input-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .prompt-line {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: var(--text-color);
+            line-height: 1.5;
+        }
+
+        .transform-input {
+            flex: 1;
+            min-width: 280px;
+            padding: 12px 16px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border: 3px solid #CBD5E1;
+            border-radius: 12px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
+            outline: none;
+            color: #0F172A;
+        }
+
+        .transform-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(136, 84, 192, 0.15);
+        }
+
+        .transform-input.correct-field {
+            border-color: var(--correct-color) !important;
+            background-color: #E6FBF1;
+            color: #008744;
+        }
+
+        .transform-input.wrong-field {
+            border-color: var(--wrong-color) !important;
+            background-color: #FFEAEB;
+            color: #C51F24;
+            animation: shake 0.4s ease;
+        }
+
+        .btn-check-item {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 900;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #00A88F;
+        }
+
+        .btn-check-item:hover:not(.disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #00A88F;
+        }
+
+        .btn-check-item:active:not(.disabled) {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #00A88F;
+        }
+
+        .btn-check-item.disabled {
+            background: #94A3B8 !important;
+            box-shadow: 0 4px 0 #64748B !important;
+            pointer-events: none;
+            cursor: not-allowed;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+
+        /* BOX GIẢI THÍCH CHI TIẾT */
+        .explanation-box {
+            background: #F8FAFC;
+            border-left: 6px solid var(--primary-color);
+            border-radius: 0 12px 12px 0;
+            padding: 16px;
+            margin-top: 18px;
+            display: none;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .exp-title {
+            font-weight: 900;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+            font-size: 1.05rem;
+        }
+
+        .exp-section {
+            margin-bottom: 6px;
+            font-size: 0.95rem;
+            color: #475569;
+            line-height: 1.5;
+        }
+
+        .exp-highlight {
+            font-weight: 700;
+            color: #0F172A;
+        }
+
+        .submit-container {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .btn-submit-main {
+            background: #FF7675;
+            color: #FFFFFF;
+            font-size: 1.3rem;
+            font-weight: 900;
+            padding: 16px 45px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #D63031;
+        }
+
+        .btn-submit-main:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 11px 0 #D63031;
+        }
+
+        /* MODAL KẾT QUẢ TỔNG HỢP */
+        .modal-result {
+            position: fixed;
+            top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+            display: none;
+        }
+
+        .modal-body {
+            background: #FFFFFF;
+            padding: 30px;
+            border-radius: 24px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            border: 5px solid var(--accent-color);
+            box-shadow: 0 12px 0 #00A88F;
+            animation: popUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes popUp {
+            from { transform: scale(0.7); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .score-text {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--primary-color);
+            margin: 15px 0;
+        }
+
+        .feedback-text {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-color);
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .btn-close-modal {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-weight: 700;
+            font-size: 1rem;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #00A88F;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 150;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="confetti-canvas"></canvas>
+
+    <div class="container">
+        <div class="header-teacher">Giáo viên tạo: Ms Lê Hằng English</div>
+        
+        <div class="notice-box">
+            <span class="notice-title">⚠️ HƯỚNG DẪN LUYỆN ĐỀ ĐỈNH CAO ⚠️</span>
+            Hãy suy nghĩ thật kỹ để viết tiếp cấu trúc tương đương. Sau khi bấm <b>Kiểm tra</b>, hệ thống sẽ mở khóa đáp án chi tiết. Việc đọc phân tích ngữ pháp và ghi chép bẫy đề thi là chìa khóa duy nhất giúp bạn bứt phá điểm số!
+        </div>
+
+        <!-- KHU VỰC CHỨA CÁC CÂU HỎI TỰ ĐỘNG GENERATE -->
+        <div id="quiz-container"></div>
+
+        <div class="submit-container">
+            <button class="btn-submit-main" onclick="evaluateAll()">NỘP BÀI TỔNG KẾT ĐIỂM</button>
+        </div>
+    </div>
+
+    <!-- Hộp thoại Kết quả -->
+    <div class="modal-result" id="result-modal">
+        <div class="modal-body">
+            <h2 style="margin-top:0; color: var(--accent-color);">🎉 KẾT QUẢ BÀI LÀM 🎉</h2>
+            <div class="score-text" id="score-display">0/0</div>
+            <div class="feedback-text" id="feedback-display"></div>
+            <button class="btn-close-modal" onclick="closeModal()">Làm lại bài thi</button>
+        </div>
+    </div>
+
+    <script>
+        // WEB AUDIO API SYSTEM
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playTone(freq, type, duration) {
+            try {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e) {}
+        }
+        function soundCorrect() {
+            playTone(523.25, 'sine', 0.15);
+            setTimeout(() => playTone(659.25, 'sine', 0.3), 100);
+        }
+        function soundWrong() {
+            playTone(180, 'sawtooth', 0.2);
+            setTimeout(() => playTone(130, 'sawtooth', 0.3), 150);
+        }
+
+        // DATABASE 15 CÂU HỎI THEO 10 CHỦ ĐỀ CHUYÊN SÂU
+        const quizData = [
+            {
+                id: "q1",
+                section: "1. Sử dụng Idiom",
+                origin: "Having little financial support, the student lived very cheaply. (SHOESTRING)",
+                promptStart: "The student",
+                promptEnd: "little financial support.",
+                acceptableAnswers: [
+                    "lived on a shoestring because of having",
+                    "lived on a shoestring due to having",
+                    "lived on a shoestring as he had",
+                    "lived on a shoestring since he had",
+                    "lived on a shoestring as they had",
+                    "lived on a shoestring because they had"
+                ],
+                fullCorrectShow: "The student lived on a shoestring because of having little financial support.",
+                translation: "Vì có ít sự hỗ trợ tài chính, người sinh viên đó đã sống rất tằn tiện.",
+                analysis: "Idiom 'on a shoestring' nghĩa là sống bằng một số tiền rất nhỏ/eo hẹp.",
+                justification: "Thay thế cụm 'lived very cheaply' bằng 'lived on a shoestring'. Tiếp theo phối hợp mệnh đề nguyên nhân phù hợp với cụm từ cho sẵn ở cuối đề.",
+                trap: "Cần chú ý cụm từ cho sẵn ở cuối 'little financial support' để nối câu cho mượt và đúng cấu trúc."
+            },
+            {
+                id: "q2",
+                section: "2. Sử dụng Phrasal Verbs",
+                origin: "You can stay with us for a few days. (PUT)",
+                promptStart: "We",
+                promptEnd: "",
+                acceptableAnswers: ["can put you up for a few days"],
+                fullCorrectShow: "We can put you up for a few days.",
+                translation: "Bạn có thể ở lại với chúng tôi trong vài ngày.",
+                analysis: "Phrasal verb 'put someone up' có nghĩa là cho ai đó ở nhờ qua đêm hoặc ở tạm vài ngày.",
+                justification: "Biến đổi cấu trúc 'stay with us' thành 'put you up'. Giữ nguyên trợ động từ 'can' và trạng từ 'for a few days'.",
+                trap: "Học sinh đôi khi đặt nhầm vị trí tân ngữ (viết sai thành: 'put up you' thay vì 'put you up')."
+            },
+            {
+                id: "q3",
+                section: "3. Dạng kép (Kết hợp cấu trúc câu với Idiom hoặc Phrasal Verbs)",
+                origin: "He was extremely happy because he won that scholarship. (MOON)",
+                promptStart: "Had",
+                promptEnd: "",
+                acceptableAnswers: [
+                    "he not won that scholarship, he would not have been over the moon",
+                    "he not won that scholarship, he wouldn't have been over the moon"
+                ],
+                fullCorrectShow: "Had he not won that scholarship, he wouldn't have been over the moon.",
+                translation: "Nếu anh ấy không giành được học bổng đó, anh ấy đã không hạnh phúc tột cùng.",
+                analysis: "Kết hợp đảo ngữ câu điều kiện loại 3 (Had + S + not + V3) và cụm từ 'over the moon' (vô cùng hạnh phúc).",
+                justification: "Viết lại dưới dạng câu điều kiện trái ngược quá khứ. Thay thế 'extremely happy' bằng cụm thành ngữ 'over the moon'.",
+                trap: "Cẩn thận vị trí của từ 'not' trong đảo ngữ loại 3: 'Had he not won' chứ không phải 'Had not he won'."
+            },
+            {
+                id: "q4",
+                section: "3. Dạng kép (Kết hợp cấu trúc câu với Idiom hoặc Phrasal Verbs)",
+                origin: "You have to accept the truth although it is hurtful. (TERMS)",
+                promptStart: "Hurtful",
+                promptEnd: "",
+                acceptableAnswers: [
+                    "as the truth is, you have to come to terms with it",
+                    "though the truth is, you have to come to terms with it"
+                ],
+                fullCorrectShow: "Hurtful as the truth is, you have to come to terms with it.",
+                translation: "Dù sự thật có đau lòng đi chăng nữa, bạn vẫn phải chấp nhận nó.",
+                analysis: "Sử dụng cấu trúc đảo ngữ nhượng bộ (Adj + as/though + S + be) kết hợp idiom 'come to terms with' (chấp nhận một sự thật phũ phàng).",
+                justification: "Đưa tính từ 'Hurtful' lên đầu câu, theo sau là 'as/though the truth is', mệnh đề sau đổi cụm 'accept the truth' thành 'come to terms with it'.",
+                trap: "Tránh dùng nhầm giới từ của cụm từ 'come to terms with' thành các từ như 'of' hay 'at'."
+            },
+            {
+                id: "q5",
+                section: "4. Bị động dạng đặc biệt",
+                origin: "They say the ice in Antarctica is getting thinner all the time. (SAID)",
+                promptStart: "The ice",
+                promptEnd: "",
+                acceptableAnswers: ["in antarctica is said to be getting thinner all the time"],
+                fullCorrectShow: "The ice in Antarctica is said to be getting thinner all the time.",
+                translation: "Băng ở Nam Cực được cho là đang ngày càng mỏng đi suốt thời gian qua.",
+                analysis: "Cấu trúc bị động khách quan dạng hai vế cùng thuộc mốc thời gian hiện tại (Hiện tại đơn & Hiện tại tiếp diễn).",
+                justification: "Chuyển chủ ngữ vế sau 'The ice in Antarctica' lên làm chủ ngữ chính, biến đổi động từ tiếp diễn thành dạng 'to be V-ing'.",
+                trap: "Học sinh hay quên ghi phần cụm giới từ chỉ nơi chốn 'in Antarctica' ngay sau chủ ngữ 'The ice'."
+            },
+            {
+                id: "q6",
+                section: "5. Câu tường thuật dạng đặc biệt",
+                origin: '"Don’t worry. Of course, you can take a month’s paid leave", said my boss.',
+                promptStart: "My boss reassured",
+                promptEnd: "",
+                acceptableAnswers: [
+                    "me that i could take a month's paid leave",
+                    "me that i could take a month’s paid leave"
+                ],
+                fullCorrectShow: "My boss reassured me that I could take a month's paid leave.",
+                translation: "Sếp của tôi đã trấn an tôi rằng tôi có thể xin nghỉ phép một tháng vẫn hưởng lương.",
+                analysis: "Động từ 'reassure someone that + clause' dùng để tường thuật lại một lời trấn an chắc chắn.",
+                justification: "Sử dụng tân ngữ chỉ người nhận lời trấn an (me) và lùi thì trợ động từ 'can' thành 'could'.",
+                trap: "Quên lùi thì động từ 'can' thành 'could' hoặc thiếu tân ngữ 'me' đứng sau động từ 'reassured'."
+            },
+            {
+                id: "q7",
+                section: "5. Câu tường thuật dạng đặc biệt",
+                origin: '“You can’t have supper until you’ve washed your hands,” said John’s mother. (LET)',
+                promptStart: "John’s mother refused",
+                promptEnd: "",
+                acceptableAnswers: [
+                    "to let john have supper until he had washed his hands",
+                    "to let him have supper until he had washed his hands"
+                ],
+                fullCorrectShow: "John’s mother refused to let him have supper until he had washed his hands.",
+                translation: "Mẹ của John từ chối cho cậu ấy ăn tối cho đến khi cậu ấy rửa sạch tay.",
+                analysis: "Cấu trúc từ chối 'refuse to do something' kết hợp với cấu trúc cho phép 'let someone do something'.",
+                justification: "Biến đổi lời cấm đoán thành cấu trúc từ chối 'refused to let him...', đồng thời lùi thì hoàn thành 'have washed' thành 'had washed'.",
+                trap: "Chú ý chuyển đổi đại từ nhân xưng 'you' thành 'he/him' và tính từ sở hữu 'your' thành 'his' cho khớp ngữ cảnh tường thuật."
+            },
+            {
+                id: "q8",
+                section: "6. Dạng đảo ngữ",
+                origin: "You don’t find such exquisite hand-made suits in many shops here.",
+                promptStart: "In few",
+                promptEnd: "",
+                acceptableAnswers: ["shops here do you find such exquisite hand-made suits"],
+                fullCorrectShow: "In few shops here do you find such exquisite hand-made suits.",
+                translation: "Ở rất ít cửa hàng tại đây bạn mới tìm thấy những bộ vest thủ công tinh xảo như vậy.",
+                analysis: "Đảo ngữ với cụm từ phủ định/bán phủ định bắt đầu bằng giới từ 'In few...'.",
+                justification: "Đưa cụm 'In few shops here' lên đầu câu làm thành phần nhấn mạnh, mượn trợ động từ 'do' đảo lên trước chủ ngữ 'you'.",
+                trap: "Vì 'few' đã mang sẵn sắc thái phủ định nên động từ tuyệt đối không dùng dạng phủ định 'don't' nữa."
+            },
+            {
+                id: "q9",
+                section: "6. Dạng đảo ngữ",
+                origin: "I managed to finish the task, but it was difficult. (SUCCEED)",
+                promptStart: "Only",
+                promptEnd: "",
+                acceptableAnswers: ["with difficulty did i succeed in finishing the task"],
+                fullCorrectShow: "Only with difficulty did I succeed in finishing the task.",
+                translation: "Chỉ với sự khó khăn tôi mới thành công trong việc hoàn thành nhiệm vụ.",
+                analysis: "Đảo ngữ cấu trúc 'Only with + Danh từ + trợ động từ + S + V' đi kèm giới từ của cụm 'succeed in V-ing'.",
+                justification: "Chuyển tính từ 'difficult' thành danh từ 'difficulty' kết hợp với 'Only with'. Do câu ở quá khứ nên mượn trợ động từ 'did'.",
+                trap: "Rất nhiều học sinh quên giới từ 'in' sau động từ 'succeed' hoặc quên đổi động từ sau đó về dạng V-ing."
+            },
+            {
+                id: "q10",
+                section: "7. Dạng đảo ngữ so…that/ such that",
+                origin: "The demand was so great that they had to reprint the book immediately",
+                promptStart: "So",
+                promptEnd: "",
+                acceptableAnswers: ["great was the demand that they had to reprint the book immediately"],
+                fullCorrectShow: "So great was the demand that they had to reprint the book immediately.",
+                translation: "Nhu cầu lớn đến mức họ phải tái bản cuốn sách ngay lập tức.",
+                analysis: "Đảo ngữ cấu trúc So...that kinh điển: So + Adj + be + S + that + Clause.",
+                justification: "Đưa tính từ 'So great' lên đầu câu, thực hiện đảo động từ tobe 'was' lên trước cụm danh từ chủ ngữ 'the demand'.",
+                trap: "Nhầm lẫn trật tự từ thành 'So great the demand was' (lỗi không đảo ngữ cực kỳ phổ biến)."
+            },
+            {
+                id: "q11",
+                section: "7. Dạng đảo ngữ so…that/ such that",
+                origin: "Jack was so nervous that his mind couldn't function properly. (STRAIGHT)",
+                promptStart: "Such",
+                promptEnd: "",
+                acceptableAnswers: ["was jack's nervousness that he couldn't think straight"],
+                fullCorrectShow: "Such was Jack's nervousness that he couldn't think straight.",
+                translation: "Sự lo lắng của Jack lớn đến mức anh ấy không thể suy nghĩ một cách tỉnh táo được.",
+                analysis: "Đảo ngữ cấu trúc Such...that: Such + be + N + that... kết hợp cụm từ thành ngữ 'think straight' (suy nghĩ thông suốt).",
+                justification: "Biến đổi tính từ 'nervous' thành danh từ 'nervousness', vế sau đổi cụm 'mind couldn't function properly' thành 'couldn't think straight'.",
+                trap: "Phải biến đổi chính xác tính từ sang danh từ thích hợp thì cấu trúc 'Such' mới hợp lệ."
+            },
+            {
+                id: "q12",
+                section: "8. Ngay khi …. Thì",
+                origin: "He received another letter from her as soon as he found the time to reply to her. (ROUND)",
+                promptStart: "No sooner",
+                promptEnd: "",
+                acceptableAnswers: [
+                    "had he got round to replying to her than he received another letter from her",
+                    "had he gotten round to replying to her than he received another letter from her"
+                ],
+                fullCorrectShow: "No sooner had he got round to replying to her than he received another letter from her.",
+                translation: "Ngay khi anh ấy tìm được thời gian để phản hồi cô ấy thì anh ấy lại nhận được một bức thư khác từ cô ấy.",
+                analysis: "Phối hợp cấu trúc 'No sooner had + S + V3 than + S + V2' với phrasal verb 'get round to V-ing' (xoay xở, tìm thời gian để làm gì).",
+                justification: "Hành động tìm thời gian xảy ra trước nên đảo ngữ quá khứ hoàn thành với 'No sooner had he got...', hành động nhận thư xảy ra sau nối bằng từ 'than'.",
+                trap: "Nhầm lẫn dùng từ nối 'when' thay vì dùng 'than' - từ đi kèm bắt buộc của cấu trúc 'No sooner'."
+            },
+            {
+                id: "q13",
+                section: "9. Dù cho … nhưng dạng đặc biệt",
+                origin: "Although she didn't agree with the management's decision, Chloe was forced to accept it. (CHOICE)",
+                promptStart: "Much",
+                promptEnd: "",
+                acceptableAnswers: [
+                    "as she disagreed with the management's decision, chloe had no choice but to accept it",
+                    "as she didn't agree with the management's decision, chloe had no choice but to accept it"
+                ],
+                fullCorrectShow: "Much as she disagreed with the management's decision, Chloe had no choice but to accept it.",
+                translation: "Dù không hề đồng tình với quyết định của ban quản lý, Chloe không còn sự lựa chọn nào khác ngoài chấp nhận nó.",
+                analysis: "Cấu trúc nhượng bộ đặc biệt 'Much as + S + V' (Dù cho rất...) đi kèm cấu trúc 'have no choice but to V' (không có lựa chọn nào ngoài).",
+                justification: "Thay thế 'Although' bằng cụm nhấn mạnh 'Much as', vế sau chuyển 'was forced to accept' thành cụm danh từ 'had no choice but to accept'.",
+                trap: "Quên giới từ 'but' hoặc sử dụng nhầm động từ dạng V-ing sau cấu trúc 'have no choice but'."
+            },
+            {
+                id: "q14",
+                section: "10. Đảo ngữ mệnh đề if",
+                origin: "We were not late for school because you took us in your car. (TIME)",
+                promptStart: "Had",
+                promptEnd: "",
+                acceptableAnswers: [
+                    "you not taken us in your car, we wouldn't have been in time for school",
+                    "you not taken us in your car, we would not have been in time for school",
+                    "it not been for your car, we wouldn't have been in time for school"
+                ],
+                fullCorrectShow: "Had you not taken us in your car, we wouldn't have been in time for school.",
+                translation: "Nếu bạn không chở chúng tôi bằng xe hơi, chúng tôi đã không kịp giờ học.",
+                analysis: "Đảo ngữ câu điều kiện loại 3 (Had + S + not + V3) kết hợp cụm từ chỉ thời gian 'in time' (kịp giờ).",
+                justification: "Chuyển mệnh đề nguyên nhân quá khứ thành giả định loại 3 đảo ngữ. Biến đổi tính từ phủ định 'not late' thành cụm từ đồng nghĩa chứa từ khóa bắt buộc là 'in time'.",
+                trap: "Cần chú ý từ khóa gợi ý '(TIME)' để chủ động chuyển đổi 'not late' sang cụm 'in time'."
+            },
+            {
+                id: "q15",
+                section: "10. Đảo ngữ mệnh đề if",
+                origin: "We rely too much on the Internet. Therefore, our lives are in danger of becoming more impersonal.",
+                promptStart: "Were",
+                promptEnd: "",
+                acceptableAnswers: [
+                    "we not to rely so much on the internet, our lives wouldn't be in danger of becoming more impersonal",
+                    "we not to rely so much on the internet, our lives would not be in danger of becoming more impersonal"
+                ],
+                fullCorrectShow: "Were we not to rely so much on the Internet, our lives wouldn't be in danger of becoming more impersonal.",
+                translation: "Nếu chúng ta không phụ thuộc quá nhiều vào Internet, cuộc sống của chúng ta đã không có nguy cơ trở nên thiếu nhân văn/xa cách hơn.",
+                analysis: "Đảo ngữ câu điều kiện loại 2 giả định trái thực tế hiện tại với động từ thường: Were + S + not + to V.",
+                justification: "Chuyển vế thực tế hiện tại thành phủ định loại 2 dạng đảo ngữ 'Were we not to rely so much...'.",
+                trap: "Học sinh thường quên thêm giới từ 'to' trước động từ nguyên thể khi thực hiện đảo ngữ loại 2 với động từ thường."
+            }
+        ];
+
+        function normalizeString(str) {
+            return str.toLowerCase()
+                      .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()’']/g,"")
+                      .replace(/\s+/g," ")
+                      .trim();
+        }
+
+        // RENDER INTERACTIVE INTERFACE
+        function renderQuiz() {
+            const container = document.getElementById('quiz-container');
+            let currentSection = "";
+
+            quizData.forEach((q, index) => {
+                if (q.section !== currentSection) {
+                    currentSection = q.section;
+                    const secTitle = document.createElement('div');
+                    secTitle.className = 'section-title';
+                    secTitle.innerHTML = currentSection;
+                    container.appendChild(secTitle);
+                }
+
+                const card = document.createElement('div');
+                card.className = 'question-card';
+                card.id = `card_${q.id}`;
+
+                const originDiv = document.createElement('div');
+                originDiv.className = 'origin-sentence';
+                originDiv.innerHTML = `<b>Đề gốc:</b> ${q.origin}`;
+                card.appendChild(originDiv);
+
+                const wrapper = document.createElement('div');
+                wrapper.className = 'input-wrapper';
+
+                const promptLine = document.createElement('div');
+                promptLine.className = 'prompt-line';
+                promptLine.innerHTML = `<span>➔ ${q.promptStart}</span>`;
+
+                const inputField = document.createElement('input');
+                inputField.type = "text";
+                inputField.className = "transform-input";
+                inputField.id = `input_${q.id}`;
+                inputField.placeholder = "Viết tiếp câu hoàn chỉnh vào đây...";
+                
+                inputField.addEventListener("keyup", function(event) {
+                    if (event.key === "Enter") {
+                        checkSentenceAnswer(q.id);
+                    }
+                });
+
+                promptLine.appendChild(inputField);
+
+                if(q.promptEnd !== "") {
+                    const endSpan = document.createElement('span');
+                    endSpan.innerText = ` ${q.promptEnd}`;
+                    promptLine.appendChild(endSpan);
+                }
+
+                const checkBtn = document.createElement('button');
+                checkBtn.className = "btn-check-item";
+                checkBtn.id = `btn_${q.id}`;
+                checkBtn.innerText = "Kiểm tra";
+                checkBtn.onclick = () => checkSentenceAnswer(q.id);
+
+                promptLine.appendChild(checkBtn);
+                wrapper.appendChild(promptLine);
+                card.appendChild(wrapper);
+
+                const expBox = document.createElement('div');
+                expBox.className = 'explanation-box';
+                expBox.id = `exp_${q.id}`;
+                expBox.innerHTML = `
+                    <div class="exp-title">🌟 GIẢI THÍCH CHI TIẾT TỪ MS LÊ HẰNG:</div>
+                    <div class="exp-section"><span class="exp-highlight">➔ Câu hoàn chỉnh đúng:</span> <span style="color:#008744; font-weight:700;">${q.fullCorrectShow}</span></div>
+                    <div class="exp-section"><span class="exp-highlight">1. Dịch nghĩa:</span> ${q.translation}</div>
+                    <div class="exp-section"><span class="exp-highlight">2. Hiện tượng ngữ pháp:</span> ${q.analysis}</div>
+                    <div class="exp-section"><span class="exp-highlight">3. Hướng dẫn biến đổi câu:</span> ${q.justification}</div>
+                    <div class="exp-section"><span class="exp-highlight">4. Lưu ý tránh mất điểm:</span> <span style="color:#FF4757; font-weight:700;">${q.trap}</span></div>
+                `;
+                card.appendChild(expBox);
+                container.appendChild(card);
+            });
+        }
+
+        function checkSentenceAnswer(qId) {
+            const inputEl = document.getElementById(`input_${qId}`);
+            const btnEl = document.getElementById(`btn_${qId}`);
+            const q = quizData.find(item => item.id === qId);
+
+            if (!inputEl || inputEl.classList.contains('correct-field') || inputEl.classList.contains('wrong-field')) return;
+
+            const userTextNormalized = normalizeString(inputEl.value);
+            const isCorrect = q.acceptableAnswers.some(ans => normalizeString(ans) === userTextNormalized);
+
+            inputEl.disabled = true;
+            btnEl.classList.add('disabled');
+
+            if (isCorrect) {
+                inputEl.classList.add('correct-field');
+                soundCorrect();
+                triggerConfettiEffect();
+            } else {
+                inputEl.classList.add('wrong-field');
+                soundWrong();
+            }
+
+            const exp = document.getElementById(`exp_${qId}`);
+            if (exp) exp.style.display = 'block';
+        }
+
+        // CONFETTI ANIMATION ENGINE
+        const canvasEl = document.getElementById('confetti-canvas');
+        const ctxCanvas = canvasEl.getContext('2d');
+        let particles = [];
+        function resizeCanvas() {
+            canvasEl.width = window.innerWidth;
+            canvasEl.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function triggerConfettiEffect() {
+            for (let i = 0; i < 40; i++) {
+                particles.push({
+                    x: window.innerWidth / 2 + (Math.random() - 0.5) * 260,
+                    y: window.innerHeight / 2 + (Math.random() - 0.5) * 180,
+                    vx: (Math.random() - 0.5) * 12,
+                    vy: (Math.random() - 0.8) * 14,
+                    color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+                    size: Math.random() * 6 + 5,
+                    alpha: 1
+                });
+            }
+        }
+
+        function updateConfetti() {
+            ctxCanvas.clearRect(0, 0, canvasEl.width, canvasEl.height);
+            particles.forEach((p, idx) => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.22;
+                p.alpha -= 0.015;
+                if (p.alpha <= 0) {
+                    particles.splice(idx, 1);
+                } else {
+                    ctxCanvas.fillStyle = p.color;
+                    ctxCanvas.globalAlpha = p.alpha;
+                    ctxCanvas.beginPath();
+                    ctxCanvas.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctxCanvas.fill();
+                }
+            });
+            ctxCanvas.globalAlpha = 1;
+            requestAnimationFrame(updateConfetti);
+        }
+        requestAnimationFrame(updateConfetti);
+
+        function evaluateAll() {
+            let totalQuestions = quizData.length;
+            let correctCount = 0;
+
+            quizData.forEach(q => {
+                const inputEl = document.getElementById(`input_${q.id}`);
+                if (inputEl && inputEl.classList.contains('correct-field')) {
+                    correctCount++;
+                }
+            });
+
+            let feedback = "";
+            const percentage = (correctCount / totalQuestions) * 100;
+
+            if (percentage === 100) {
+                feedback = "Thần sầu! Con đã đạt điểm tuyệt đối 15/15. Tư duy viết câu Chuyên Anh/HSG của con vô cùng sắc bén rồi đó!";
+            } else if (percentage >= 60) {
+                feedback = "Làm tốt lắm! Con đã nắm được cốt lõi hầu hết các dạng bài nâng cao này. Hãy đọc thật kỹ các câu sai để rút kinh nghiệm nhé!";
+            } else {
+                feedback = "Kết quả chưa như ý muốn nhưng đừng nản nhé. Con hãy rà soát lại các mục giải thích chi tiết của cô và thử sức lại nha!";
+            }
+
+            document.getElementById('score-display').innerText = `${correctCount} / ${totalQuestions}`;
+            document.getElementById('feedback-display').innerText = feedback;
+            document.getElementById('result-modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('result-modal').style.display = 'none';
+            location.reload();
+        }
+
+        window.onload = function() {
+            renderQuiz();
+        };
+    </script>
+</body>
+</html>
